@@ -78,20 +78,26 @@ ifconfig
 5 Localisation Options / I1 Change Locale - ищем и выбираем пробелом ru_RU.UTF-8 UTF-8
 5 Localisation Options / I2 Change Timezone - выбираем часовой пояс
 
-Установка пакетов нужных для работы и установки Hass.io
-
-sudo apt-get install -y bash curl git jq avahi-daemon dbus apparmor-utils libavahi-compat-libdnssd-dev libatlas3-base apt-transport-https ca-certificates socat software-properties-common ftpd mc 
-
-Перезагрузка - 
-sudo reboot
-
 Установка docker - 
-sudo curl -fsSL get.docker.com -o get-docker.sh && sh get-docker.sh
+sudo curl -fsSL get.docker.com | sh
 
-Добавляем группу docker и добавляем в нее пользователя
-sudo groupadd docker
+Добавляем в группу docker пользователя
 sudo gpasswd -a $USER docker
 newgrp docker
+
+Установка OS-Agent
+
+Последний релиз - https://github.com/home-assistant/os-agent/releases/latest
+
+wget https://github.com/home-assistant/os-agent/releases/download/1.2.2/os-agent_1.2.2_linux_aarch64.deb (меняем на актуальную)
+
+sudo dpkg -i os-agent_1.2.2_linux_aarch64.deb
+
+Установка Home Assisistant Supervised
+
+wget https://github.com/home-assistant/supervised-installer/releases/latest/download/homeassistant-supervised.deb
+
+sudo dpkg -i homeassistant-supervised.deb
 
 ставим Portainer - 
 docker pull portainer/portainer-ce
@@ -99,18 +105,4 @@ docker volume create portainer_data
 docker run -d -p 9000:9000 --name portainer --restart always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
 
 Веб интерфейс Portainer - IP adress:9000
-
-Переходим в режим root - sudo su
-
-Установка hass.io (список ключей тут - https://github.com/home-assistant/supervised-installer)
-
-Скрипт
-curl -Lo installer.sh https://raw.githubusercontent.com/home-assistant/supervised-installer/master/installer.sh
-
-Для Raspberry 3
-bash installer.sh --machine raspberrypi3
-
-Для Raspberry 4
-bash installer.sh --machine raspberrypi4
-
 Веб интерфейс Home Assistant - IP adress:8123
